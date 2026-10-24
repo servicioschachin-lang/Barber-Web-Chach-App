@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aura Studio | Salón de belleza</title>
+<meta name="description" content="Cabello, uñas, maquillaje y cuidado facial. Reserva tu cita en línea.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#10061c;
+    --ink:#fbf3ff;
+    --muted:#c4acd6;
+    --pink:#ff3df2;
+    --violet:#9d6bff;
+    --lime:#c6ff3d;
+    --glass:rgba(255,255,255,.07);
+    --line:rgba(255,255,255,.18);
+    --radius:28px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Outfit',system-ui,sans-serif;
+    color:var(--ink);
+    background:var(--bg);
+    line-height:1.65;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-1;
+    background:
+      radial-gradient(600px 600px at 90% 6%, rgba(255,61,242,.32), transparent 70%),
+      radial-gradient(560px 560px at 4% 38%, rgba(157,107,255,.32), transparent 70%),
+      radial-gradient(520px 520px at 85% 80%, rgba(198,255,61,.14), transparent 70%),
+      var(--bg);
+  }
+  img{display:block;width:100%;height:100%;object-fit:cover}
+  a{color:inherit;text-decoration:none}
+  h1,h2,h3{font-family:'Syne',sans-serif;line-height:1.05}
+  :focus-visible{outline:3px solid var(--lime);outline-offset:3px;border-radius:8px}
+
+  .wrap{width:min(1140px,92%);margin-inline:auto}
+  section{padding:84px 0}
+  .glass{
+    background:var(--glass);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    -webkit-backdrop-filter:blur(20px) saturate(150%);
+    backdrop-filter:blur(20px) saturate(150%);
+    box-shadow:0 12px 44px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.16);
+  }
+  .sec-title{font-size:clamp(2rem,4.6vw,3.2rem);font-weight:800;margin-bottom:12px}
+  .sec-sub{color:var(--muted);max-width:52ch;margin-bottom:40px;font-weight:300;font-size:1.08rem}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    padding:15px 30px;border-radius:999px;border:1px solid transparent;
+    font:600 1rem 'Outfit',sans-serif;cursor:pointer;transition:transform .2s, box-shadow .2s;
+  }
+  .btn-neon{
+    background:var(--pink);color:#2b0027;
+    box-shadow:0 0 18px rgba(255,61,242,.75), 0 0 56px rgba(255,61,242,.4);
+  }
+  .btn-neon:hover{transform:translateY(-2px);box-shadow:0 0 28px rgba(255,61,242,1), 0 0 80px rgba(255,61,242,.55)}
+  .btn-ghost{background:var(--glass);border-color:var(--line);color:var(--ink);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+  .btn-ghost:hover{border-color:var(--lime);box-shadow:0 0 22px rgba(198,255,61,.45)}
+
+  /* Navegación */
+  header{position:sticky;top:14px;z-index:20;margin-top:14px}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 12px 26px;border-radius:999px}
+  .logo{font:800 1.45rem 'Syne',sans-serif}
+  .logo span{color:var(--pink);text-shadow:0 0 16px var(--pink)}
+  .nav-links{display:flex;gap:28px;list-style:none;color:var(--muted)}
+  .nav-links a:hover{color:var(--ink)}
+  nav .btn{padding:10px 22px}
+
+  /* Hero: foto de fondo con panel de vidrio */
+  .hero{padding:50px 0 30px}
+  .hero-box{
+    position:relative;min-height:600px;border-radius:36px;overflow:hidden;
+    border:1px solid var(--line);
+    box-shadow:0 0 60px rgba(255,61,242,.28), 0 0 130px rgba(157,107,255,.2);
+    background:linear-gradient(140deg,#3a1260,#7a1a74);
+    display:flex;align-items:flex-end;
+  }
+  .hero-box > img{position:absolute;inset:0}
+  .hero-box::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(16,6,28,.85) 5%,rgba(16,6,28,.15) 70%)}
+  .hero-panel{position:relative;z-index:1;margin:clamp(18px,4vw,48px);padding:clamp(26px,4vw,46px);max-width:560px}
+  .hero-panel h1{
+    font-size:clamp(2.6rem,6.6vw,4.8rem);font-weight:800;margin-bottom:18px;
+    text-shadow:0 0 20px rgba(255,61,242,.65), 0 0 56px rgba(255,61,242,.35);
+    animation:glow 3.2s ease-in-out infinite alternate;
+  }
+  .hero-panel p{color:var(--muted);font-size:1.12rem;margin-bottom:28px;font-weight:300}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+  .badge{position:absolute;z-index:1;right:clamp(18px,4vw,48px);top:clamp(18px,4vw,48px);padding:14px 20px;text-align:center}
+  .badge b{display:block;font:800 1.8rem 'Syne',sans-serif;color:var(--lime);text-shadow:0 0 14px rgba(198,255,61,.7)}
+  .badge span{color:var(--muted);font-size:.9rem}
+  @keyframes glow{
+    from{text-shadow:0 0 14px rgba(255,61,242,.45), 0 0 40px rgba(255,61,242,.2)}
+    to{text-shadow:0 0 24px rgba(255,61,242,.9), 0 0 70px rgba(255,61,242,.5)}
+  }
+
+  /* Servicios */
+  .services{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .service{overflow:hidden;display:flex;flex-direction:column}
+  .service .ph{height:210px;background:linear-gradient(140deg,#3a1260,#7a1a74)}
+  .service .body{padding:24px 26px 28px;display:flex;flex-direction:column;flex:1}
+  .service h3{font-size:1.45rem;font-weight:700;margin-bottom:8px}
+  .service p{color:var(--muted);font-weight:300;flex:1}
+  .meta{display:flex;justify-content:space-between;align-items:center;margin-top:18px}
+  .meta b{font:700 1.3rem 'Syne',sans-serif;color:var(--lime);text-shadow:0 0 12px rgba(198,255,61,.55)}
+  .meta span{color:var(--muted);font-size:.9rem}
+
+  /* Galería */
+  .gallery{columns:4;column-gap:16px}
+  .shot{break-inside:avoid;margin-bottom:16px;border-radius:24px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(140deg,#3a1260,#7a1a74)}
+  .shot img{height:auto}
+  .shot:nth-child(1),.shot:nth-child(4){aspect-ratio:3/4}
+  .shot:nth-child(2),.shot:nth-child(5){aspect-ratio:1/1}
+  .shot:nth-child(3){aspect-ratio:4/5}
+  .shot:nth-child(6){aspect-ratio:3/4}
+  .shot img{height:100%}
+
+  /* Planes */
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .plan{padding:32px 28px}
+  .plan.featured{border-color:rgba(255,61,242,.7);box-shadow:0 0 40px rgba(255,61,242,.35), inset 0 1px 0 rgba(255,255,255,.16)}
+  .plan h3{font-size:1.4rem;font-weight:700}
+  .plan .big{font:800 2.8rem 'Syne',sans-serif;margin:10px 0 14px;color:var(--pink);text-shadow:0 0 18px rgba(255,61,242,.6)}
+  .plan ul{list-style:none;color:var(--muted);font-weight:300}
+  .plan li{padding:7px 0;border-bottom:1px dashed var(--line)}
+
+  /* Opiniones */
+  .reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .review{padding:28px}
+  .review .who{display:flex;align-items:center;gap:14px;margin-top:18px}
+  .avatar{width:48px;height:48px;border-radius:50%;overflow:hidden;border:2px solid var(--violet);box-shadow:0 0 14px rgba(157,107,255,.7);background:#3a1260}
+  .stars{color:var(--lime);text-shadow:0 0 10px rgba(198,255,61,.7);letter-spacing:3px}
+  .review p{margin-top:10px;font-weight:300}
+  .review small{color:var(--muted)}
+
+  /* Reservas */
+  .book-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:start}
+  .book{padding:36px}
+  .field{margin-bottom:18px}
+  label,.lbl{display:block;font-weight:500;margin-bottom:8px;font-size:.95rem}
+  input,select{
+    width:100%;padding:14px 18px;border-radius:16px;border:1px solid var(--line);
+    background:rgba(255,255,255,.08);color:var(--ink);font:400 1rem 'Outfit',sans-serif;color-scheme:dark;
+  }
+  input::placeholder{color:#8f78a6}
+  input:focus,select:focus{outline:none;border-color:var(--pink);box-shadow:0 0 0 3px rgba(255,61,242,.28), 0 0 22px rgba(255,61,242,.35)}
+  select option{background:#1a0a2b;color:var(--ink)}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .slots{display:flex;flex-wrap:wrap;gap:10px}
+  .slot{
+    padding:10px 17px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.07);
+    color:var(--ink);font:400 .95rem 'Outfit',sans-serif;cursor:pointer;transition:all .2s;
+  }
+  .slot:hover{border-color:var(--lime)}
+  .slot[aria-pressed="true"]{background:var(--lime);border-color:var(--lime);color:#172200;font-weight:600;box-shadow:0 0 20px rgba(198,255,61,.75)}
+  .slot:disabled{opacity:.3;cursor:not-allowed;text-decoration:line-through}
+  .book .btn{width:100%;margin-top:6px}
+  .msg{margin-top:16px;padding:16px 18px;border-radius:16px;display:none;border:1px solid rgba(198,255,61,.6);background:rgba(198,255,61,.1)}
+  .msg.err{border-color:rgba(255,61,242,.7);background:rgba(255,61,242,.12)}
+  .msg.show{display:block}
+  .info-card{padding:32px}
+  .info-card h3{font-size:1.6rem;font-weight:700;margin-bottom:14px}
+  .info-card ul{list-style:none}
+  .info-card li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line);color:var(--muted);font-weight:300}
+  .info-card li b{color:var(--ink);font-weight:500}
+  .info-card p{margin-top:18px;color:var(--muted);font-weight:300}
+
+  footer{padding:40px 0 50px;border-top:1px solid var(--line);color:var(--muted);font-weight:300}
+  .foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
+
+  @media (max-width:960px){
+    .book-grid{grid-template-columns:1fr}
+    .services,.plans,.reviews{grid-template-columns:1fr}
+    .gallery{columns:2}
+    .nav-links{display:none}
+    .hero-box{min-height:560px}
+    .badge{display:none}
+  }
+  @media (max-width:540px){
+    .row{grid-template-columns:1fr}
+    section{padding:60px 0}
+    .book{padding:24px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <nav class="glass" aria-label="Principal">
+      <a href="#inicio" class="logo">Aura<span>Studio</span></a>
+      <ul class="nav-links">
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#galeria">Galería</a></li>
+        <li><a href="#paquetes">Paquetes</a></li>
+        <li><a href="#opiniones">Opiniones</a></li>
+      </ul>
+      <a href="#reservas" class="btn btn-neon">Reservar cita</a>
+    </nav>
+  </div>
+</header>
+
+<main id="inicio">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-box">
+        <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1600&q=80" alt="Interior del salón de belleza" onerror="this.style.display='none'">
+        <div class="badge glass"><b>4.9</b><span>en +800 reseñas</span></div>
+        <div class="hero-panel glass">
+          <h1>Brilla con tu propia luz</h1>
+          <p>Cabello, uñas, maquillaje y cuidado facial en un solo lugar. Elige tu horario y nosotras nos encargamos del resto.</p>
+          <div class="hero-cta">
+            <a href="#reservas" class="btn btn-neon">Reservar mi cita</a>
+            <a href="#servicios" class="btn btn-ghost">Ver servicios</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="servicios">
+    <div class="wrap">
+      <h2 class="sec-title">Servicios</h2>
+      <p class="sec-sub">Tratamientos pensados para que salgas sintiéndote increíble.</p>
+      <div class="services">
+        <article class="glass service">
+          <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=800&q=80" alt="Peinado y corte de cabello" onerror="this.style.display='none'"></div>
+          <div class="body"><h3>Corte y peinado</h3><p>Corte a tu medida, lavado y peinado con secado profesional.</p><div class="meta"><b>$20</b><span>60 min</span></div></div>
+        </article>
+        <article class="glass service">
+          <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80" alt="Coloración de cabello" onerror="this.style.display='none'"></div>
+          <div class="body"><h3>Color y mechas</h3><p>Tinte, balayage y retoque de raíz con productos que cuidan tu cabello.</p><div class="meta"><b>$55</b><span>120 min</span></div></div>
+        </article>
+        <article class="glass service">
+          <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80" alt="Manicura con diseño" onerror="this.style.display='none'"></div>
+          <div class="body"><h3>Uñas y manicura</h3><p>Manicura, gel o acrílico con diseños a tu gusto.</p><div class="meta"><b>$18</b><span>50 min</span></div></div>
+        </article>
+        <article class="glass service">
+          <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=800&q=80" alt="Maquillaje profesional" onerror="this.style.display='none'"></div>
+          <div class="body"><h3>Maquillaje</h3><p>Para el día a día, una cita o un evento especial.</p><div class="meta"><b>$30</b><span>60 min</span></div></div>
+        </article>
+        <article class="glass service">
+          <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=800&q=80" alt="Tratamiento facial" onerror="this.style.display='none'"></div>
+          <div class="body"><h3>Limpieza facial</h3><p>Limpieza profunda, hidratación y masaje relajante.</p><div class="meta"><b>$35</b><span>75 min</span></div></div>
+        </article>
+        <article class="glass service">
+          <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1519415943484-9fa1873496d4?auto=format&fit=crop&w=800&q=80" alt="Tratamiento capilar" onerror="this.style.display='none'"></div>
+          <div class="body"><h3>Tratamiento capilar</h3><p>Hidratación y reparación para cabello seco o dañado.</p><div class="meta"><b>$28</b><span>45 min</span></div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="galeria">
+    <div class="wrap">
+      <h2 class="sec-title">Inspiración</h2>
+      <p class="sec-sub">Looks reales de nuestras clientas.</p>
+      <div class="gallery">
+        <div class="shot"><img loading="lazy" src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=700&q=80" alt="Peinado con ondas" onerror="this.style.display='none'"></div>
+        <div class="shot"><img loading="lazy" src="https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=700&q=80" alt="Cabello con color" onerror="this.style.display='none'"></div>
+        <div class="shot"><img loading="lazy" src="https://images.unsplash.com/photo-1457972729786-0411a3b2b626?auto=format&fit=crop&w=700&q=80" alt="Uñas decoradas" onerror="this.style.display='none'"></div>
+        <div class="shot"><img loading="lazy" src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=700&q=80" alt="Maquillaje de ojos" onerror="this.style.display='none'"></div>
+        <div class="shot"><img loading="lazy" src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?auto=format&fit=crop&w=700&q=80" alt="Corte y peinado" onerror="this.style.display='none'"></div>
+        <div class="shot"><img loading="lazy" src="https://images.unsplash.com/photo-1634449571010-02389ed0f9b0?auto=format&fit=crop&w=700&q=80" alt="Peinado para evento" onerror="this.style.display='none'"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="paquetes">
+    <div class="wrap">
+      <h2 class="sec-title">Paquetes</h2>
+      <p class="sec-sub">Combina servicios y ahorra en tu visita.</p>
+      <div class="plans">
+        <article class="glass plan">
+          <h3>Día de brillo</h3><div class="big">$45</div>
+          <ul><li>Corte y peinado</li><li>Manicura</li><li>Hidratación capilar</li></ul>
+        </article>
+        <article class="glass plan featured">
+          <h3>Novia o evento</h3><div class="big">$110</div>
+          <ul><li>Peinado de evento</li><li>Maquillaje completo</li><li>Manicura con diseño</li><li>Prueba previa</li></ul>
+        </article>
+        <article class="glass plan">
+          <h3>Relax total</h3><div class="big">$60</div>
+          <ul><li>Limpieza facial</li><li>Masaje de cuero cabelludo</li><li>Manicura y pedicura</li></ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="opiniones">
+    <div class="wrap">
+      <h2 class="sec-title">Lo que dicen</h2>
+      <p class="sec-sub">Opiniones de nuestras clientas.</p>
+      <div class="reviews">
+        <article class="glass review"><div class="stars" aria-label="5 estrellas">★★★★★</div><p>Me hicieron el color que soñaba y mi cabello quedó sano. Volveré seguro.</p>
+          <div class="who"><div class="avatar"><img loading="lazy" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80" alt="" onerror="this.style.display='none'"></div><small>Ana L.</small></div></article>
+        <article class="glass review"><div class="stars" aria-label="5 estrellas">★★★★★</div><p>Reservar en línea fue facilidad pura. El maquillaje duró toda la boda.</p>
+          <div class="who"><div class="avatar"><img loading="lazy" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=120&q=80" alt="" onerror="this.style.display='none'"></div><small>Sofía P.</small></div></article>
+        <article class="glass review"><div class="stars" aria-label="5 estrellas">★★★★★</div><p>Las uñas me quedaron hermosas y el ambiente del salón es súper relajante.</p>
+          <div class="who"><div class="avatar"><img loading="lazy" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=120&q=80" alt="" onerror="this.style.display='none'"></div><small>Daniela C.</small></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="reservas">
+    <div class="wrap">
+      <h2 class="sec-title">Reserva tu cita</h2>
+      <p class="sec-sub">Elige servicio, día y hora. Te confirmamos por teléfono.</p>
+      <div class="book-grid">
+        <form class="glass book" id="formReserva" novalidate>
+          <div class="row">
+            <div class="field"><label for="nombre">Nombre</label><input id="nombre" type="text" placeholder="Tu nombre" autocomplete="name" required></div>
+            <div class="field"><label for="tel">Teléfono</label><input id="tel" type="tel" placeholder="0000-0000" autocomplete="tel" required></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="servicio">Servicio</label>
+              <select id="servicio" required>
+                <option value="">Selecciona uno</option>
+                <option>Corte y peinado</option>
+                <option>Color y mechas</option>
+                <option>Uñas y manicura</option>
+                <option>Maquillaje</option>
+                <option>Limpieza facial</option>
+                <option>Tratamiento capilar</option>
+              </select>
+            </div>
+            <div class="field"><label for="estilista">Estilista</label>
+              <select id="estilista">
+                <option>Cualquiera disponible</option>
+                <option>Valeria Cruz</option>
+                <option>Camila Ortiz</option>
+                <option>Lucía Herrera</option>
+              </select>
+            </div>
+          </div>
+          <div class="field"><label for="fecha">Fecha</label><input id="fecha" type="date" required></div>
+          <div class="field">
+            <span class="lbl" id="horaLbl">Hora</span>
+            <div class="slots" id="slots" role="group" aria-labelledby="horaLbl"></div>
+          </div>
+          <button class="btn btn-neon" type="submit">Confirmar reserva</button>
+          <div class="msg" id="msg" role="status" aria-live="polite"></div>
+        </form>
+
+        <aside class="glass info-card">
+          <h3>Horarios</h3>
+          <ul>
+            <li>Lunes a viernes <b>9:00 – 19:00</b></li>
+            <li>Sábado <b>9:00 – 17:00</b></li>
+            <li>Domingo <b>Cerrado</b></li>
+          </ul>
+          <p>Calle de las Flores 45, Centro<br>Tel. 0000-0000</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© 2026 Aura Studio. Todos los derechos reservados.</span>
+    <span>Instagram · Facebook · WhatsApp</span>
+  </div>
+</footer>
+
+<script>
+  const horas = ['09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00','18:00'];
+  const slots = document.getElementById('slots');
+  const fecha = document.getElementById('fecha');
+  const msg = document.getElementById('msg');
+  let horaSel = '';
+
+  const hoy = new Date();
+  fecha.min = new Date(hoy.getTime() - hoy.getTimezoneOffset()*60000).toISOString().split('T')[0];
+
+  horas.forEach(h => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'slot'; b.textContent = h;
+    b.setAttribute('aria-pressed','false');
+    b.addEventListener('click', () => {
+      horaSel = h;
+      slots.querySelectorAll('.slot').forEach(s => s.setAttribute('aria-pressed', s === b ? 'true' : 'false'));
+    });
+    slots.appendChild(b);
+  });
+
+  // Simula algunas horas ocupadas según el día elegido
+  fecha.addEventListener('change', () => {
+    const d = new Date(fecha.value + 'T00:00:00');
+    horaSel = '';
+    slots.querySelectorAll('.slot').forEach((s, i) => {
+      s.setAttribute('aria-pressed','false');
+      s.disabled = (d.getDate() + i) % 5 === 0;
+    });
+  });
+
+  function mostrar(texto, error){
+    msg.textContent = texto;
+    msg.className = 'msg show' + (error ? ' err' : '');
+  }
+
+  document.getElementById('formReserva').addEventListener('submit', e => {
+    e.preventDefault();
+    const nombre = document.getElementById('nombre').value.trim();
+    const tel = document.getElementById('tel').value.trim();
+    const servicio = document.getElementById('servicio').value;
+    if(!nombre || !tel || !servicio || !fecha.value || !horaSel){
+      mostrar('Completa nombre, teléfono, servicio, fecha y hora para reservar.', true);
+      return;
+    }
+    mostrar(`Listo, ${nombre}. Reservaste ${servicio} el ${fecha.value} a las ${horaSel}. Te llamaremos al ${tel} para confirmar.`);
+    e.target.reset();
+    horaSel = '';
+    slots.querySelectorAll('.slot').forEach(s => { s.setAttribute('aria-pressed','false'); s.disabled = false; });
+  });
+</script>
+</body>
+</html>
