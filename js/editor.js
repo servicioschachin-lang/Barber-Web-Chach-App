@@ -16,6 +16,9 @@ export class Editor {
       $('#edEstado').textContent = 'Cambios sin guardar';
       if (this.onChange) this.onChange();
     });
+    this.history = [];
+    this.historyIndex = -1;
+    this.historyTimer = null;
   }
 
   async loadTemplate(template) {
@@ -49,6 +52,7 @@ export class Editor {
     $('#edEstado').textContent = '';
     $('#frame').srcdoc = addBaseTag(this.estado.html, this.estado.base);
     ['btnCambiar', 'btnGuardar', 'btnPublicar'].forEach(id => $('#' + id).disabled = false);
+    this.initHistory();
     window.scrollTo({ top: 0 });
   }
 
@@ -74,6 +78,10 @@ export class Editor {
     this.renderSocialLinks(doc);
     this.setupColorPicker(doc);
     this.setupViewToggle();
+    const btnUndo = $('#btnUndo');
+    const btnRedo = $('#btnRedo');
+    if (btnUndo) btnUndo.onclick = () => this.undo();
+    if (btnRedo) btnRedo.onclick = () => this.redo();
   }
 
   injectStyles(doc) {
@@ -136,7 +144,14 @@ export class Editor {
     }, true);
 
     doc.addEventListener('submit', e => e.preventDefault(), true);
-    doc.addEventListener('keydown', e => { if (e.key === 'Enter') e.preventDefault(); }, true);
+    doc.addEventListener('keydown', e => {
+      if (e.key === 'Enter') e.preventDefault();
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'z' || e.key === 'y' || e.key === 'Z' || e.key === 'Y')) {
+        e.preventDefault();
+        if (e.key.toLowerCase() === 'z' && !e.shiftKey) this.undo();
+        else if (e.key.toLowerCase() === 'y' || (e.key.toLowerCase() === 'z' && e.shiftKey)) this.redo();
+      }
+    }, true);
     doc.addEventListener('paste', e => {
       if (!e.target.closest('[data-cw-edit]')) return;
       e.preventDefault();
@@ -146,6 +161,7 @@ export class Editor {
     doc.addEventListener('drop', e => e.preventDefault(), true);
     doc.addEventListener('input', () => {
       $('#edEstado').textContent = 'Cambios sin guardar';
+      this.schedulePush();
       if (this.onChange) this.onChange();
     });
   }
@@ -210,7 +226,20 @@ export class Editor {
         $('#edEstado').textContent = 'Cambios sin guardar';
         if (this.onChange) this.onChange();
       },
-      onChangeImage: (img) => this.imageEditor.replace(img)
+      onChangeImage: (img) => this.imageEditor.replace(img),
+      onReplaceImage: (target) => {
+        const doc = $('#frame').contentDocument;
+        const img = doc.createElement('img');
+        img.alt = '';
+        img.style.maxWidth = '100%';
+        if (target.parentNode) target.parentNode.replaceChild(img, target);
+        this.elementoSeleccionado = null;
+        if (this.toolbar) this.toolbar.hide();
+        this.selectElement(img);
+        this.imageEditor.replace(img);
+        $('#edEstado').textContent = 'Cambios sin guardar';
+        if (this.onChange) this.onChange();
+      }
     });
     this.toolbar.show(el);
   }
@@ -463,6 +492,49 @@ export class Editor {
       row.appendChild(inp);
       list.appendChild(row);
     });
+  }
+
+  initHistory() {
+    if (!this.estado) return;
+    this.history = [this.estado.html];
+    this.historyIndex = 0;
+  }
+
+  schedulePush() {
+    clearTimeout(this.historyTimer);
+    this.historyTimer = setTimeout(() => this.pushHistory(), 600);
+  }
+
+  pushHistory() {
+    if (!this.estado) return;
+    const html = this.getHTML();
+    if (this.historyIndex >= 0 && this.history[this.historyIndex] === html) return;
+    this.history = this.history.slice(0, this.historyIndex + 1);
+    this.history.push(html);
+    this.historyIndex = this.history.length - 1;
+    if (this.history.length > 50) {
+      this.history.shift();
+      this.historyIndex = Math.max(0, this.historyIndex - 1);
+    }
+  }
+
+  undo() {
+    if (this.historyIndex <= 0) return;
+    this.historyIndex--;
+    this.restoreHistory();
+  }
+
+  redo() {
+    if (this.historyIndex >= this.history.length - 1) return;
+    this.historyIndex++;
+    this.restoreHistory();
+  }
+
+  restoreHistory() {
+    if (!this.estado) return;
+    this.estado.html = this.history[this.historyIndex];
+    $('#frame').srcdoc = addBaseTag(this.estado.html, this.estado.base);
+    $('#edEstado').textContent = 'Cambios restaurados';
   }
 
   getHTML() {
