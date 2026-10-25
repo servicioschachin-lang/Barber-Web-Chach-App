@@ -1,6 +1,8 @@
 /* Gestión del editor de plantillas */
 import { CONFIG, SOCIAL_PATTERNS, SOCIAL_NAMES } from './config.js';
 import { $, addBaseTag, rgbToHex } from './utils.js';
+import { ElementToolbar } from './element-toolbar.js';
+import { ImageEditor } from './image-editor.js';
 
 export class Editor {
   constructor() {
@@ -9,6 +11,11 @@ export class Editor {
     this.onSave = null;
     this.onChange = null;
     this.modalSocial = null;
+    this.toolbar = null;
+    this.imageEditor = new ImageEditor(() => {
+      $('#edEstado').textContent = 'Cambios sin guardar';
+      if (this.onChange) this.onChange();
+    });
   }
 
   async loadTemplate(template) {
@@ -79,6 +86,12 @@ export class Editor {
       [data-cw-edit]:focus{outline:2px solid #4f6df5;outline-offset:2px}
       img[data-cw-img]{cursor:pointer}
       img[data-cw-img]:hover{outline:3px solid #4f6df5;outline-offset:-3px}
+      .cw-toolbar{position:absolute;z-index:9999;display:flex;gap:6px;padding:6px;background:rgba(255,255,255,.95);border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.25);align-items:center}
+      .cw-toolbar-btn{border:0;background:transparent;cursor:pointer;font-size:1.1rem;padding:4px 6px;border-radius:8px}
+      .cw-toolbar-btn:hover{background:rgba(79,109,245,.15)}
+      .cw-color-pop{display:none;gap:8px;align-items:center;margin-left:6px}
+      .cw-color-pop label{font-size:.75rem;font-weight:600}
+      .cw-color-pop input[type="color"]{width:36px;height:28px;border:0;padding:0;cursor:pointer}
     `;
     doc.head.appendChild(st);
   }
@@ -102,12 +115,14 @@ export class Editor {
 
   attachEditorEvents(doc) {
     doc.addEventListener('click', (e) => {
-      const img = e.target.closest('img[data-cw-img]');
-      if (img) {
+      const img = e.target.closest('img');
+      if (img && img.hasAttribute('data-cw-img')) {
         e.preventDefault();
-        this.changeImage(img);
+        e.stopPropagation();
+        this.imageEditor.replace(img);
         return;
       }
+      if (e.target.closest('.cw-toolbar')) return;
       if (e.target.closest('a,button,[role=button]')) e.preventDefault();
       // Seleccionar elemento con clic normal (para poder borrar, cambiar color, etc.)
       const el = e.target.closest('*');
@@ -169,14 +184,35 @@ export class Editor {
   selectElement(el) {
     const doc = $('#frame').contentDocument;
     if (this.elementoSeleccionado) this.elementoSeleccionado.style.outline = '';
+    if (this.toolbar) this.toolbar.hide();
     this.elementoSeleccionado = el;
     el.style.outline = '3px solid #4f6df5';
-    $('#selectorColor').style.display = 'block';
-    const cf = $('#colorElementoFondo');
-    const ct = $('#colorElementoTexto');
-    const estilo = window.getComputedStyle(el);
-    cf.value = rgbToHex(estilo.backgroundColor) || '#ffffff';
-    ct.value = rgbToHex(estilo.color) || '#000000';
+
+    this.toolbar = new ElementToolbar(doc, {
+      onEdit: (target) => {
+        try { target.setAttribute('contenteditable', 'true'); target.focus(); } catch (e) {}
+      },
+      onColor: (target, type, value) => {
+        if (type === 'bg') {
+          target.style.backgroundColor = value;
+          target.setAttribute('data-cw-bg', value);
+        } else {
+          target.style.color = value;
+          target.setAttribute('data-cw-color', value);
+        }
+        $('#edEstado').textContent = 'Cambios sin guardar';
+        if (this.onChange) this.onChange();
+      },
+      onDelete: (target) => {
+        if (target && target.parentNode) target.parentNode.removeChild(target);
+        this.elementoSeleccionado = null;
+        if (this.toolbar) this.toolbar.hide();
+        $('#edEstado').textContent = 'Cambios sin guardar';
+        if (this.onChange) this.onChange();
+      },
+      onChangeImage: (img) => this.imageEditor.replace(img)
+    });
+    this.toolbar.show(el);
   }
 
   setupColorPicker(doc) {
@@ -195,7 +231,6 @@ export class Editor {
       if (this.onChange) this.onChange();
     });
 
-    this.setupElementColorPicker(doc);
   }
 
   setupElementColorPicker(doc) {
