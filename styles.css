@@ -234,3 +234,32 @@ body {
   width: 100%;
   height: 100%;
 }
+/* Barra flotante de acciones del elemento seleccionado */
+.cw-toolbar {
+  position: absolute;
+  z-index: 9999;
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  background: rgba(255,255,255,.95);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+  align-items: center;
+}
+.cw-toolbar-btn {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 4px 6px;
+  border-radius: 8px;
+}
+.cw-toolbar-btn:hover { background: rgba(79,109,245,.15); }
+.cw-color-pop {
+  display: none;
+  gap: 8px;
+  align-items: center;
+  margin-left: 6px;
+}
+.cw-color-pop label { font-size: .75rem; font-weight: 600; }
+.cw-color-pop input[type="color"] { width: 36px; height: 28px; border: 0; padding: 0; cursor: pointer; }
