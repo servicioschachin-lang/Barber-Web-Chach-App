@@ -19,6 +19,7 @@ export class ElementToolbar {
     this.el = target;
     this.colorOpen = false;
     const isImg = target.tagName === 'IMG';
+    const hasBgImg = target.hasAttribute('data-cw-bg-img');
     const bar = this.doc.createElement('div');
     bar.className = 'cw-toolbar';
     bar.setAttribute('data-cw', '1');
@@ -33,6 +34,7 @@ export class ElementToolbar {
     };
     bar.appendChild(makeBtn(I.edit, 'Editar', () => this.handlers.onEdit && this.handlers.onEdit(this.el)));
     if (isImg) bar.appendChild(makeBtn(I.image, 'Cambiar imagen', () => this.handlers.onChangeImage && this.handlers.onChangeImage(this.el)));
+    else if (hasBgImg) bar.appendChild(makeBtn(I.image, 'Cambiar fondo', () => this.handlers.onChangeImage && this.handlers.onChangeImage(this.el)));
     else bar.appendChild(makeBtn(I.replace, 'Reemplazar por imagen', () => this.handlers.onReplaceImage && this.handlers.onReplaceImage(this.el)));
     bar.appendChild(makeBtn(I.color, 'Colores', () => this.toggleColors()));
     bar.appendChild(makeBtn(I.trash, 'Borrar', () => this.handlers.onDelete && this.handlers.onDelete(this.el)));

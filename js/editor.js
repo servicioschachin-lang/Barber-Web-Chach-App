@@ -94,6 +94,8 @@ export class Editor {
       [data-cw-edit]:focus{outline:2px solid #4f6df5;outline-offset:2px}
       img[data-cw-img]{cursor:pointer}
       img[data-cw-img]:hover{outline:3px solid #4f6df5;outline-offset:-3px}
+      [data-cw-bg-img]{cursor:pointer}
+      [data-cw-bg-img]:hover{outline:3px solid #4f6df5;outline-offset:2px}
       .cw-toolbar{position:absolute;z-index:9999;display:flex;gap:6px;padding:6px;background:rgba(255,255,255,.95);border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.25);align-items:center}
       .cw-toolbar-btn{border:0;background:transparent;cursor:pointer;font-size:1.1rem;padding:4px 6px;border-radius:8px}
       .cw-toolbar-btn:hover{background:rgba(79,109,245,.15)}
@@ -110,6 +112,13 @@ export class Editor {
       if (SKIP.test(el.tagName.toUpperCase()) || el.closest('svg,script,style,noscript')) return;
       if (el.tagName === 'IMG') {
         el.setAttribute('data-cw-img', '1');
+        return;
+      }
+      // Detectar elementos con background-image (fondos CSS)
+      const computed = window.getComputedStyle(el);
+      const bgImage = computed.backgroundImage;
+      if (bgImage && bgImage !== 'none' && !bgImage.includes('gradient')) {
+        el.setAttribute('data-cw-bg-img', '1');
         return;
       }
       const propio = [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim().length > 0);
@@ -130,11 +139,19 @@ export class Editor {
         this.imageEditor.replace(img);
         return;
       }
+      // Detectar clic en elementos con background-image
+      const bgImg = e.target.closest('[data-cw-bg-img]');
+      if (bgImg) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.replaceBackgroundImage(bgImg);
+        return;
+      }
       if (e.target.closest('.cw-toolbar')) return;
       if (e.target.closest('a,button,[role=button]')) e.preventDefault();
       // Seleccionar elemento con clic normal (para poder borrar, cambiar color, etc.)
       const el = e.target.closest('*');
-      if (el && !el.closest('img') && !el.closest('input,textarea,select')) {
+      if (el && !el.closest('img') && !el.closest('[data-cw-bg-img]') && !el.closest('input,textarea,select')) {
         this.selectElement(el);
       }
       // Si se mantiene Shift, también procesar selección (mismo comportamiento)
@@ -197,6 +214,36 @@ export class Editor {
     inp.click();
   }
 
+  replaceBackgroundImage(el) {
+    const inp = document.createElement('input');
+    inp.type = 'file';
+    inp.accept = 'image/*';
+    inp.onchange = () => {
+      const f = inp.files[0];
+      if (!f) return;
+      const rd = new FileReader();
+      rd.onload = () => {
+        const im = new Image();
+        im.onload = () => {
+          const M = 1600;
+          const k = Math.min(1, M / Math.max(im.width, im.height));
+          const c = document.createElement('canvas');
+          c.width = Math.round(im.width * k);
+          c.height = Math.round(im.height * k);
+          c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+          const data = f.type === 'image/png' ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', .85);
+          el.style.backgroundImage = `url(${data})`;
+          el.setAttribute('data-cw-bg-img', '1');
+          $('#edEstado').textContent = 'Cambios sin guardar';
+          if (this.onChange) this.onChange();
+        };
+        im.src = rd.result;
+      };
+      rd.readAsDataURL(f);
+    };
+    inp.click();
+  }
+
   selectElement(el) {
     const doc = $('#frame').contentDocument;
     if (this.elementoSeleccionado) this.elementoSeleccionado.style.outline = '';
@@ -226,7 +273,13 @@ export class Editor {
         $('#edEstado').textContent = 'Cambios sin guardar';
         if (this.onChange) this.onChange();
       },
-      onChangeImage: (img) => this.imageEditor.replace(img),
+      onChangeImage: (target) => {
+        if (target.tagName === 'IMG') {
+          this.imageEditor.replace(target);
+        } else if (target.hasAttribute('data-cw-bg-img')) {
+          this.replaceBackgroundImage(target);
+        }
+      },
       onReplaceImage: (target) => {
         const doc = $('#frame').contentDocument;
         const img = doc.createElement('img');
