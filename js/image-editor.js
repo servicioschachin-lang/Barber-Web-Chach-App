@@ -14,10 +14,13 @@
       rd.onload = () => {
         const im = new Image();
         im.onload = () => {
-          // Mantener las dimensiones originales de la imagen
-          const originalWidth = img.width || img.style.width;
-          const originalHeight = img.height || img.style.height;
-          const originalStyle = img.getAttribute('style') || '';
+          // Guardar todos los estilos importantes de la imagen original
+          const computed = window.getComputedStyle(img);
+          const originalWidth = img.style.width || computed.width;
+          const originalHeight = img.style.height || computed.height;
+          const originalObjectFit = img.style.objectFit || computed.objectFit;
+          const originalDisplay = img.style.display || computed.display;
+          const originalMaxWidth = img.style.maxWidth || computed.maxWidth;
 
           const M = 1600;
           const k = Math.min(1, M / Math.max(im.width, im.height));
@@ -30,9 +33,12 @@
           img.removeAttribute('sizes');
           img.src = data;
 
-          // Restaurar dimensiones originales
-          if (originalWidth) img.style.width = originalWidth;
-          if (originalHeight) img.style.height = originalHeight;
+          // Restaurar estilos originales exactamente
+          img.style.width = originalWidth;
+          img.style.height = originalHeight;
+          img.style.objectFit = originalObjectFit;
+          img.style.display = originalDisplay;
+          img.style.maxWidth = originalMaxWidth;
 
           if (this.onHistoryPush) this.onHistoryPush();
           if (this.onChange) this.onChange();
