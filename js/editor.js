@@ -295,15 +295,8 @@ export class Editor {
         img.alt = '';
         img.style.maxWidth = '100%';
         img.setAttribute('data-cw-img', '1');
-        // Guardar el contenido actual en un contenedor temporal
-        const wrapper = doc.createElement('div');
-        wrapper.style.display = 'none';
-        wrapper.setAttribute('data-cw-temp', '1');
-        while (target.firstChild) {
-          wrapper.appendChild(target.firstChild);
-        }
-        target.appendChild(wrapper);
-        target.appendChild(img);
+        // Insertar la imagen al inicio del elemento sin borrar el contenido
+        target.insertBefore(img, target.firstChild);
         this.elementoSeleccionado = null;
         if (this.toolbar) this.toolbar.hide();
         this.selectElement(img);

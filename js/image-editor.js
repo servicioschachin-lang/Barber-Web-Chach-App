@@ -14,6 +14,11 @@
       rd.onload = () => {
         const im = new Image();
         im.onload = () => {
+          // Mantener las dimensiones originales de la imagen
+          const originalWidth = img.width || img.style.width;
+          const originalHeight = img.height || img.style.height;
+          const originalStyle = img.getAttribute('style') || '';
+
           const M = 1600;
           const k = Math.min(1, M / Math.max(im.width, im.height));
           const c = document.createElement('canvas');
@@ -24,6 +29,11 @@
           img.removeAttribute('srcset');
           img.removeAttribute('sizes');
           img.src = data;
+
+          // Restaurar dimensiones originales
+          if (originalWidth) img.style.width = originalWidth;
+          if (originalHeight) img.style.height = originalHeight;
+
           if (this.onHistoryPush) this.onHistoryPush();
           if (this.onChange) this.onChange();
         };
