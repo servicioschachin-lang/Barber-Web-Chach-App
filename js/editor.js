@@ -112,10 +112,13 @@ export class Editor {
 
   makeEditable(doc) {
     const SKIP = /^(SCRIPT|STYLE|NOSCRIPT|SELECT|OPTION|TEXTAREA|INPUT|SVG|IFRAME|CODE|PRE|HTML|HEAD|TITLE)$/;
+    const images = doc.body.querySelectorAll('img');
+    console.log('Imágenes encontradas:', images.length);
     doc.body.querySelectorAll('*').forEach(el => {
       if (SKIP.test(el.tagName.toUpperCase()) || el.closest('svg,script,style,noscript')) return;
       if (el.tagName === 'IMG') {
         el.setAttribute('data-cw-img', '1');
+        console.log('Imagen marcada:', el);
         return;
       }
       // Detectar elementos con background-image (fondos CSS)
@@ -126,6 +129,7 @@ export class Editor {
                         (inlineBg && inlineBg !== 'none' && !inlineBg.includes('gradient'));
       if (hasBgImage) {
         el.setAttribute('data-cw-bg-img', '1');
+        console.log('Fondo CSS marcado:', el, bgImage);
         return;
       }
       const propio = [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim().length > 0);
