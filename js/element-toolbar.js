@@ -33,9 +33,11 @@ export class ElementToolbar {
       return b;
     };
     bar.appendChild(makeBtn(I.edit, 'Editar', () => this.handlers.onEdit && this.handlers.onEdit(this.el)));
-    if (isImg) bar.appendChild(makeBtn(I.image, 'Cambiar imagen', () => this.handlers.onChangeImage && this.handlers.onChangeImage(this.el)));
-    else if (hasBgImg) bar.appendChild(makeBtn(I.image, 'Cambiar fondo', () => this.handlers.onChangeImage && this.handlers.onChangeImage(this.el)));
-    else bar.appendChild(makeBtn(I.replace, 'Reemplazar por imagen', () => this.handlers.onReplaceImage && this.handlers.onReplaceImage(this.el)));
+    if (isImg) {
+      bar.appendChild(makeBtn(I.image, 'Cambiar imagen', () => this.handlers.onChangeImage && this.handlers.onChangeImage(this.el)));
+    } else if (hasBgImg) {
+      bar.appendChild(makeBtn(I.image, 'Cambiar fondo', () => this.handlers.onChangeImage && this.handlers.onChangeImage(this.el)));
+    }
     bar.appendChild(makeBtn(I.color, 'Colores', () => this.toggleColors()));
     bar.appendChild(makeBtn(I.trash, 'Borrar', () => this.handlers.onDelete && this.handlers.onDelete(this.el)));
     const pop = this.doc.createElement('div');

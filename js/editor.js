@@ -288,19 +288,6 @@ export class Editor {
         } else if (target.hasAttribute('data-cw-bg-img')) {
           this.replaceBackgroundImage(target);
         }
-      },
-      onReplaceImage: (target) => {
-        const doc = $('#frame').contentDocument;
-        const img = doc.createElement('img');
-        img.alt = '';
-        img.style.maxWidth = '100%';
-        if (target.parentNode) target.parentNode.replaceChild(img, target);
-        this.elementoSeleccionado = null;
-        if (this.toolbar) this.toolbar.hide();
-        this.selectElement(img);
-        this.imageEditor.replace(img);
-        $('#edEstado').textContent = 'Cambios sin guardar';
-        if (this.onChange) this.onChange();
       }
     });
     this.toolbar.show(el);
