@@ -1,5 +1,8 @@
 ﻿export class ImageEditor {
-  constructor(onChange) { this.onChange = onChange; }
+  constructor(onChange, onHistoryPush) {
+    this.onChange = onChange;
+    this.onHistoryPush = onHistoryPush;
+  }
   replace(img) {
     const inp = document.createElement('input');
     inp.type = 'file';
@@ -21,6 +24,7 @@
           img.removeAttribute('srcset');
           img.removeAttribute('sizes');
           img.src = data;
+          if (this.onHistoryPush) this.onHistoryPush();
           if (this.onChange) this.onChange();
         };
         im.src = rd.result;

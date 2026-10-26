@@ -12,10 +12,13 @@ export class Editor {
     this.onChange = null;
     this.modalSocial = null;
     this.toolbar = null;
-    this.imageEditor = new ImageEditor(() => {
-      $('#edEstado').textContent = 'Cambios sin guardar';
-      if (this.onChange) this.onChange();
-    });
+    this.imageEditor = new ImageEditor(
+      () => {
+        $('#edEstado').textContent = 'Cambios sin guardar';
+        if (this.onChange) this.onChange();
+      },
+      () => this.schedulePush()
+    );
     this.history = [];
     this.historyIndex = -1;
     this.historyTimer = null;
@@ -113,7 +116,6 @@ export class Editor {
       if (SKIP.test(el.tagName.toUpperCase()) || el.closest('svg,script,style,noscript')) return;
       if (el.tagName === 'IMG') {
         el.setAttribute('data-cw-img', '1');
-        console.log('Imagen detectada:', el);
         return;
       }
       // Detectar elementos con background-image (fondos CSS)
@@ -124,7 +126,6 @@ export class Editor {
                         (inlineBg && inlineBg !== 'none' && !inlineBg.includes('gradient'));
       if (hasBgImage) {
         el.setAttribute('data-cw-bg-img', '1');
-        console.log('Fondo CSS detectado:', el, bgImage);
         return;
       }
       const propio = [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim().length > 0);
@@ -211,6 +212,7 @@ export class Editor {
           img.removeAttribute('sizes');
           img.src = data;
           $('#edEstado').textContent = 'Cambios sin guardar';
+          this.schedulePush();
           if (this.onChange) this.onChange();
         };
         im.src = rd.result;
@@ -241,6 +243,7 @@ export class Editor {
           el.style.backgroundImage = `url(${data})`;
           el.setAttribute('data-cw-bg-img', '1');
           $('#edEstado').textContent = 'Cambios sin guardar';
+          this.schedulePush();
           if (this.onChange) this.onChange();
         };
         im.src = rd.result;
@@ -594,6 +597,8 @@ export class Editor {
     this.estado.html = this.history[this.historyIndex];
     $('#frame').srcdoc = addBaseTag(this.estado.html, this.estado.base);
     $('#edEstado').textContent = 'Cambios restaurados';
+    // Esperar a que el iframe cargue antes de preparar la edición
+    $('#frame').addEventListener('load', () => this.prepareEditing(), { once: true });
   }
 
   getHTML() {
