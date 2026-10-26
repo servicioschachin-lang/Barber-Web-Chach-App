@@ -1,8 +1,9 @@
 /* Configuración de la aplicación */
 export const CONFIG = {
-  CREAWEB_URL: 'https://creaweb.chach.app',
+  CREAWEB_URL: 'https://web.chach.app',
   FORMSPREE: 'https://formspree.io/f/xrengvqb',
-  DOMINIO: 'empresagt.com',
+  DOMINIOS: ['empresagt.com', 'chach.app', 'chachin.dev'],
+  DOMINIO_DEFAULT: 'empresagt.com',
   LIMITE_HTML: 900000,
   STORE_KEY: 'creaweb_estado_v1',
   RESERVADOS: ['www', 'admin', 'mail', 'correo', 'ftp', 'api', 'app', 'panel', 'creaweb', 'soporte', 'ayuda', 'test'],
