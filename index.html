@@ -12,7 +12,7 @@
 <!-- ============ GALERÍA ============ -->
 <main id="galeria" class="container py-4">
   <header class="text-center mb-5 mt-3">
-    <h1 class="fw-bold text-3xl md:text-5xl">Elige tu plantilla para Barberos</h1>
+    <h1 class="fw-bold text-3xl md:text-5xl">Elige tu plantilla para Pintores</h1>
     <p class="opacity-75 mt-2">Revisa la vista previa, pulsa <b>Ver</b> para abrirla completa o <b>Usar</b> para personalizarla a tu estilo.</p>
     <div id="continuarBox" class="neu-in p-3 mt-4" style="display:none">
       <p class="fw-semibold mb-2">📝 Tienes un progreso guardado</p>
@@ -159,7 +159,9 @@
             <label class="small fw-semibold mb-1" for="fSub">Personaliza tu subdominio</label>
             <div class="d-flex align-items-center gap-2 mb-1">
               <input class="neu-input" id="fSub" name="subdominio" placeholder="ejemplo" required minlength="3" maxlength="30" pattern="[a-z0-9]+(-[a-z0-9]+)*" autocomplete="off" inputmode="url" data-fs-field>
-              <span class="small fw-semibold text-nowrap">.empresagt.com</span>
+              <span class="small fw-semibold text-nowrap">.</span>
+              <select class="neu-input" id="fDominio" name="dominio" style="width:auto;padding:.4rem .8rem">
+              </select>
             </div>
             <div class="small opacity-75 mb-3">Tu web quedará en: <b id="subVista">ejemplo.empresagt.com</b><br>Solo letras minúsculas, números y guiones (3 a 30 caracteres).</div>
             <label class="small fw-semibold mb-1" for="fNegocio">Nombre de tu negocio o proyecto</label>

@@ -1,9 +1,9 @@
 :root {
-  --bg: #f0f2f5;
-  --sh1: #c8d0d8;
-  --sh2: #ffffff;
-  --tx: #000000;
-  --ac: #4f6df5
+  --bg: #255b7ada;
+  --sh1: #1e4f7d;
+  --sh2: #e7e7ed;
+  --tx: #ffffff;
+  --ac: #ffffff;
 }
 
 html, body {
@@ -234,9 +234,9 @@ body {
   width: 100%;
   height: 100%;
 }
-/* Cohesión visual: contraste automático claro/oscuro */
-:root { color-scheme: light dark; }
-@media (prefers-color-scheme: dark) {
+/* Cohesión visual: contraste automático claro/oscuro - DESACTIVADO para consistencia */
+:root { color-scheme: light; }
+/* @media (prefers-color-scheme: dark) {
   :root {
     --bg: #1a1d23;
     --sh1: #0f1115;
@@ -244,7 +244,7 @@ body {
     --tx: #f0f2f5;
     --ac: #7b93ff;
   }
-}
+} */
 .bg-dark { background: #1a1d23 !important; color: #f0f2f5 !important; }
 .bg-light { background: #f0f2f5 !important; color: #1a1d23 !important; }
 .text-on-dark { color: #f0f2f5 !important; }
