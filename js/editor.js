@@ -288,6 +288,29 @@ export class Editor {
         } else if (target.hasAttribute('data-cw-bg-img')) {
           this.replaceBackgroundImage(target);
         }
+      },
+      onReplaceImage: (target) => {
+        const doc = $('#frame').contentDocument;
+        const img = doc.createElement('img');
+        img.alt = '';
+        img.style.maxWidth = '100%';
+        img.setAttribute('data-cw-img', '1');
+        // Guardar el contenido actual en un contenedor temporal
+        const wrapper = doc.createElement('div');
+        wrapper.style.display = 'none';
+        wrapper.setAttribute('data-cw-temp', '1');
+        while (target.firstChild) {
+          wrapper.appendChild(target.firstChild);
+        }
+        target.appendChild(wrapper);
+        target.appendChild(img);
+        this.elementoSeleccionado = null;
+        if (this.toolbar) this.toolbar.hide();
+        this.selectElement(img);
+        this.imageEditor.replace(img);
+        $('#edEstado').textContent = 'Cambios sin guardar';
+        this.schedulePush();
+        if (this.onChange) this.onChange();
       }
     });
     this.toolbar.show(el);
