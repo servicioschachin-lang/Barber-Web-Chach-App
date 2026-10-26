@@ -97,10 +97,11 @@ export class Editor {
       [data-cw-bg-img]{cursor:pointer}
       [data-cw-bg-img]:hover{outline:3px solid #4f6df5;outline-offset:2px}
       .cw-toolbar{position:absolute;z-index:9999;display:flex;gap:6px;padding:6px;background:rgba(255,255,255,.95);border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.25);align-items:center}
-      .cw-toolbar-btn{border:0;background:transparent;cursor:pointer;font-size:1.1rem;padding:4px 6px;border-radius:8px}
+      .cw-toolbar-btn{border:0;background:transparent;cursor:pointer;font-size:1.1rem;padding:4px 6px;border-radius:8px;color:#1a1a1a}
       .cw-toolbar-btn:hover{background:rgba(79,109,245,.15)}
-      .cw-color-pop{display:none;gap:8px;align-items:center;margin-left:6px}
-      .cw-color-pop label{font-size:.75rem;font-weight:600}
+      .cw-toolbar-btn svg{stroke:#1a1a1a}
+      .cw-color-pop{display:none;gap:8px;align-items:center;margin-left:6px;color:#1a1a1a}
+      .cw-color-pop label{font-size:.75rem;font-weight:600;color:#1a1a1a}
       .cw-color-pop input[type="color"]{width:36px;height:28px;border:0;padding:0;cursor:pointer}
     `;
     doc.head.appendChild(st);
@@ -112,13 +113,18 @@ export class Editor {
       if (SKIP.test(el.tagName.toUpperCase()) || el.closest('svg,script,style,noscript')) return;
       if (el.tagName === 'IMG') {
         el.setAttribute('data-cw-img', '1');
+        console.log('Imagen detectada:', el);
         return;
       }
       // Detectar elementos con background-image (fondos CSS)
-      const computed = window.getComputedStyle(el);
+      const computed = doc.defaultView.getComputedStyle(el);
       const bgImage = computed.backgroundImage;
-      if (bgImage && bgImage !== 'none' && !bgImage.includes('gradient')) {
+      const inlineBg = el.style.backgroundImage;
+      const hasBgImage = (bgImage && bgImage !== 'none' && !bgImage.includes('gradient')) ||
+                        (inlineBg && inlineBg !== 'none' && !inlineBg.includes('gradient'));
+      if (hasBgImage) {
         el.setAttribute('data-cw-bg-img', '1');
+        console.log('Fondo CSS detectado:', el, bgImage);
         return;
       }
       const propio = [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim().length > 0);
