@@ -51,6 +51,7 @@ export class Editor {
   open() {
     $('#galeria').style.display = 'none';
     $('#editor').style.display = 'block';
+    $('#editor').classList.add('editor-full');
     $('#edTitulo').textContent = this.estado.nombre;
     $('#edEstado').textContent = '';
     $('#frame').srcdoc = addBaseTag(this.estado.html, this.estado.base);
@@ -61,6 +62,7 @@ export class Editor {
 
   close() {
     $('#editor').style.display = 'none';
+    $('#editor').classList.remove('editor-full');
     $('#galeria').style.display = 'block';
     window.scrollTo({ top: 0 });
   }
@@ -656,6 +658,7 @@ export class Editor {
     this.estado = null;
     $('#frame').srcdoc = '';
     $('#editor').style.display = 'none';
+    $('#editor').classList.remove('editor-full');
     $('#galeria').style.display = 'block';
     ['btnCambiar', 'btnGuardar', 'btnPublicar'].forEach(id => $('#' + id).disabled = true);
     window.scrollTo({ top: 0 });

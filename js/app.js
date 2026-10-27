@@ -64,13 +64,6 @@ class App {
       this.gallery.hideContinueBox();
     });
 
-    $('#btnRegresarGaleria').addEventListener('click', () => {
-      if (!this.editor.getEstado()) return;
-      this.editor.close();
-      this.gallery.show();
-      this.updateContinueBox();
-    });
-
     $('#btnContinuar').addEventListener('click', () => {
       this.continueEditing();
     });
