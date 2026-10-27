@@ -164,8 +164,15 @@ export class Editor {
       if (e.target.closest('a,button,[role=button]')) e.preventDefault();
       // Seleccionar elemento con clic normal (para poder borrar, cambiar color, etc.)
       const el = e.target.closest('*');
-      if (el && !el.closest('img') && !el.closest('[data-cw-bg-img]') && !el.closest('input,textarea,select')) {
+      // Si se hizo clic directamente en una imagen marcada, no subir al padre
+      if (el && el.tagName === 'IMG' && el.hasAttribute('data-cw-img')) {
         this.selectElement(el);
+      } else if (el && !el.closest('img') && !el.closest('[data-cw-bg-img]') && !el.closest('input,textarea,select')) {
+        // Evitar seleccionar contenedores que tengan texto editable directo como objetivo principal
+        // (dejar que el clic en el texto lo edite, no que seleccione el contenedor para borrarlo)
+        if (!el.hasAttribute('data-cw-edit') && !el.closest('[data-cw-edit]') === el) {
+          this.selectElement(el);
+        }
       }
       // Si se mantiene Shift, también procesar selección (mismo comportamiento)
       if (e.shiftKey) {
@@ -286,7 +293,16 @@ export class Editor {
         if (this.onChange) this.onChange();
       },
       onDelete: (target) => {
-        if (target && target.parentNode) target.parentNode.removeChild(target);
+        if (!target || !target.parentNode) return;
+        // Protección: no borrar contenedores que tengan texto editable dentro
+        const tieneTextoEditable = target.querySelector('[data-cw-edit]') !== null;
+        const esContenedorHero = target.classList && target.classList.contains('hero');
+        if (tieneTextoEditable || esContenedorHero) {
+          if (!confirm('Este elemento contiene texto u otros contenidos. ¿Estás seguro de que quieres borrarlo todo?')) {
+            return;
+          }
+        }
+        target.parentNode.removeChild(target);
         this.elementoSeleccionado = null;
         if (this.toolbar) this.toolbar.hide();
         $('#edEstado').textContent = 'Cambios sin guardar';
