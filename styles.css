@@ -1,9 +1,9 @@
 :root {
-  --bg: #255b7ada;
+  --bg: #d4dbdfda;
   --sh1: #1e4f7d;
   --sh2: #e7e7ed;
-  --tx: #ffffff;
-  --ac: #ffd700;
+  --tx: #080808;
+  --ac: #3b3409;
 }
 
 html, body {
@@ -175,6 +175,41 @@ body {
   border-radius: 16px;
   background: #fff;
   transition: width .3s;
+}
+
+/* Editor a pantalla completa (solo queda visible el menú inferior) */
+#editor.editor-full {
+  min-height: calc(100vh - 96px);
+  height: calc(100vh - 96px);
+  display: flex;
+  flex-direction: column;
+  padding: 0 !important;
+}
+
+#editor.editor-full .container-fluid,
+#editor.editor-full .container {
+  padding: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+#editor.editor-full > .neu {
+  flex-shrink: 0;
+  padding: 1rem;
+  margin: 0;
+  border-radius: 0;
+  width: 100%;
+}
+
+#editor.editor-full iframe {
+  display: block;
+  height: 100%;
+  min-height: 0;
+  flex: 1;
+  border-radius: 0;
+  margin: 0;
+  width: 100%;
+  pointer-events: auto;
 }
 
 #editor iframe.mobile {
