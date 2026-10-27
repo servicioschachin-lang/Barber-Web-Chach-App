@@ -14,11 +14,13 @@
       rd.onload = () => {
         const im = new Image();
         im.onload = () => {
-          // Guardar todos los estilos importantes de la imagen original
-          const computed = window.getComputedStyle(img);
-          const originalWidth = img.style.width || computed.width;
-          const originalHeight = img.style.height || computed.height;
+          // Usar el document correcto del iframe para obtener estilos computados
+          const doc = img.ownerDocument;
+          const computed = doc.defaultView.getComputedStyle(img);
+
+          // Guardar solo estilos que afectan al ajuste y no vienen de clases CSS externas
           const originalObjectFit = img.style.objectFit || computed.objectFit;
+          const originalObjectPosition = img.style.objectPosition || computed.objectPosition;
           const originalDisplay = img.style.display || computed.display;
           const originalMaxWidth = img.style.maxWidth || computed.maxWidth;
 
@@ -33,12 +35,12 @@
           img.removeAttribute('sizes');
           img.src = data;
 
-          // Restaurar estilos originales exactamente
-          img.style.width = originalWidth;
-          img.style.height = originalHeight;
+          // Restaurar estilos de ajuste para que la nueva imagen se comporte igual
           img.style.objectFit = originalObjectFit;
+          img.style.objectPosition = originalObjectPosition;
           img.style.display = originalDisplay;
           img.style.maxWidth = originalMaxWidth;
+          // No forzar width/height inline: dejar que las clases CSS (w-100, h-100, etc.) las controlen
 
           if (this.onHistoryPush) this.onHistoryPush();
           if (this.onChange) this.onChange();

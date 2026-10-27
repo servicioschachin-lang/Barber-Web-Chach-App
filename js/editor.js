@@ -247,6 +247,10 @@ export class Editor {
           c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
           const data = f.type === 'image/png' ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', .85);
           el.style.backgroundImage = `url(${data})`;
+          // Asegurar que el fondo se ajuste correctamente al contenedor
+          if (!el.style.backgroundSize) el.style.backgroundSize = 'cover';
+          if (!el.style.backgroundPosition) el.style.backgroundPosition = 'center';
+          if (!el.style.backgroundRepeat) el.style.backgroundRepeat = 'no-repeat';
           el.setAttribute('data-cw-bg-img', '1');
           $('#edEstado').textContent = 'Cambios sin guardar';
           this.schedulePush();
