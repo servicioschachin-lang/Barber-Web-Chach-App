@@ -13,7 +13,7 @@ export const CONFIG = {
     { nombre: 'Plantilla 03', url: 'plantillas/05-minimalismo-landing.html' },
     { nombre: 'Plantilla 04', url: 'plantillas/04-brutalismo-multipagina.html' },
     { nombre: 'Plantilla 05', url: 'plantillas/03-claymorfismo-multipagina.html' },
-    { nombre: 'Plantilla 06', url: 'plantillas/01-glasmorfismo-multipage.html' },
+    { nombre: 'Plantilla 06', url: 'plantillas/01-glasmorfismo-multipagina.html' },
     { nombre: 'Plantilla 07', url: 'plantillas/02-neumorfismo-landing.html' },
     { nombre: 'Plantilla 08', url: 'plantillas/05-minimalismo-multipagina.html' },
     { nombre: 'Plantilla 09', url: 'plantillas/04-brutalismo-landing.html' },
