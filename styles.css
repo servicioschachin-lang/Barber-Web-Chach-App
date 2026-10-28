@@ -313,3 +313,33 @@ body {
 }
 .cw-color-pop label { font-size: .75rem; font-weight: 600; }
 .cw-color-pop input[type="color"] { width: 36px; height: 28px; border: 0; padding: 0; cursor: pointer; }
+
+
+/* Informe de publicación */
+#pubInforme .bg-success {
+  background: #198754 !important;
+}
+#pubInforme ol li {
+  margin-bottom: .75rem;
+}
+#pubInforme .small.fw-semibold {
+  color: var(--tx) !important;
+  opacity: 1;
+}
+
+/* Botones superiores del editor más definidos */
+.editor-actions {
+  align-items: center;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+.editor-actions .neu-btn {
+  border: 2px solid var(--sh1);
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+.editor-actions .neu-btn.primary {
+  background: var(--ac);
+  color: #fff;
+}
