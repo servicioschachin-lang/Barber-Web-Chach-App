@@ -1,0 +1,345 @@
+:root {
+  --bg: #d4dbdfda;
+  --sh1: #1e4f7d;
+  --sh2: #e7e7ed;
+  --tx: #080808;
+  --ac: #3b3409;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--tx);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body {
+  padding-bottom: 96px;
+}
+
+/* Componentes de estilo neumórfico */
+.neu {
+  background: var(--bg);
+  border-radius: 20px;
+  box-shadow: 8px 8px 16px var(--sh1), -8px -8px 16px var(--sh2);
+}
+
+.neu-in {
+  background: var(--bg);
+  border-radius: 14px;
+  box-shadow: inset 5px 5px 10px var(--sh1), inset -5px -5px 10px var(--sh2);
+}
+
+.neu-btn {
+  background: var(--bg);
+  color: var(--tx);
+  border: 0;
+  border-radius: 14px;
+  padding: .55rem 1.1rem;
+  font-weight: 600;
+  box-shadow: 5px 5px 10px var(--sh1), -5px -5px 10px var(--sh2);
+  transition: .15s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  cursor: pointer;
+}
+
+.neu-btn:hover {
+  color: var(--ac);
+}
+
+.neu-btn:active {
+  box-shadow: inset 4px 4px 8px var(--sh1), inset -4px -4px 8px var(--sh2);
+}
+
+.neu-btn.primary {
+  color: var(--ac);
+}
+
+.neu-btn:disabled,
+.neu-btn.disabled {
+  opacity: .45;
+  pointer-events: none;
+  box-shadow: none;
+}
+
+.neu-input {
+  background: var(--bg);
+  color: var(--tx);
+  border: 0;
+  border-radius: 12px;
+  padding: .65rem .9rem;
+  width: 100%;
+  box-shadow: inset 4px 4px 8px var(--sh1), inset -4px -4px 8px var(--sh2);
+  outline: none;
+}
+
+.neu-input:focus {
+  box-shadow: inset 4px 4px 8px var(--sh1), inset -4px -4px 8px var(--sh2), 0 0 0 2px var(--ac);
+}
+
+/* Galería */
+.preview {
+  height: 190px;
+  overflow: hidden;
+  position: relative;
+  border-radius: 14px;
+  margin: 14px 14px 0;
+}
+
+.preview iframe {
+  width: 400%;
+  height: 400%;
+  transform: scale(.25);
+  transform-origin: 0 0;
+  border: 0;
+  pointer-events: none;
+  background: #fff;
+}
+
+.preview .empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  font-size: .85rem;
+  opacity: .7;
+}
+
+/* Barra inferior */
+.bottombar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1030;
+  padding: 14px 12px;
+  background: var(--bg);
+  box-shadow: 0 -6px 16px var(--sh1);
+}
+
+@media (max-width: 576px) {
+  .bottombar {
+    padding: 10px 8px;
+  }
+
+  .neu-btn {
+    padding: .4rem .8rem;
+    font-size: .85rem;
+  }
+
+  body {
+    padding-bottom: 140px;
+  }
+}
+
+@media (max-width: 400px) {
+  .bottombar .container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .bottombar .d-flex {
+    justify-content: stretch;
+  }
+
+  .bottombar .neu-btn {
+    flex: 1;
+  }
+}
+
+/* Modal */
+.modal-content {
+  background: var(--bg);
+  color: var(--tx);
+  border: 0;
+  border-radius: 22px;
+  box-shadow: 10px 10px 24px rgba(0, 0, 0, .35);
+}
+
+/* Editor */
+#editor {
+  display: none;
+}
+
+#editor iframe {
+  width: 100%;
+  height: calc(100vh - 280px);
+  min-height: 420px;
+  border: 0;
+  border-radius: 16px;
+  background: #fff;
+  transition: width .3s;
+}
+
+/* Editor a pantalla completa (solo queda visible el menú inferior) */
+#editor.editor-full {
+  min-height: calc(100vh - 96px);
+  height: calc(100vh - 96px);
+  display: flex;
+  flex-direction: column;
+  padding: 0 !important;
+}
+
+#editor.editor-full .container-fluid,
+#editor.editor-full .container {
+  padding: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+#editor.editor-full > .neu {
+  flex-shrink: 0;
+  padding: 1rem;
+  margin: 0;
+  border-radius: 0;
+  width: 100%;
+}
+
+#editor.editor-full iframe {
+  display: block;
+  height: 100%;
+  min-height: 0;
+  flex: 1;
+  border-radius: 0;
+  margin: 0;
+  width: 100%;
+  pointer-events: auto;
+}
+
+#editor iframe.mobile {
+  width: 375px;
+  max-width: 100%;
+  margin: 0 auto;
+  display: block;
+}
+
+#editor iframe.desktop {
+  width: 100%;
+}
+
+.vista-toggles {
+  display: flex;
+  gap: .5rem;
+  margin-bottom: 1rem;
+}
+
+.vista-toggles button {
+  flex: 1;
+  padding: .4rem .8rem;
+  font-size: .85rem;
+}
+
+/* Redes sociales */
+.social-row {
+  display: flex;
+  gap: .6rem;
+  align-items: center;
+  margin-bottom: .5rem;
+}
+
+.social-row span {
+  min-width: 92px;
+  font-weight: 600;
+  font-size: .85rem;
+}
+
+/* Iconos de redes sociales en el iframe */
+[data-cw-social] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin: 0.5rem;
+  color: currentColor;
+  transition: transform 0.2s;
+}
+
+[data-cw-social]:hover {
+  transform: scale(1.1);
+}
+
+[data-cw-social] svg {
+  width: 100%;
+  height: 100%;
+}
+/* Cohesión visual: contraste automático claro/oscuro - DESACTIVADO para consistencia */
+:root { color-scheme: light; }
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1a1d23;
+    --sh1: #0f1115;
+    --sh2: #2a2f3a;
+    --tx: #f0f2f5;
+    --ac: #7b93ff;
+  }
+} */
+.bg-dark { background: #1a1d23 !important; color: #f0f2f5 !important; }
+.bg-light { background: #f0f2f5 !important; color: #1a1d23 !important; }
+.text-on-dark { color: #f0f2f5 !important; }
+.text-on-light { color: #1a1d23 !important; }
+/* Barra flotante de acciones del elemento seleccionado */
+.cw-toolbar {
+  position: absolute;
+  z-index: 9999;
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  background: rgba(255,255,255,.95);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+  align-items: center;
+}
+.cw-toolbar-btn {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 4px 6px;
+  border-radius: 8px;
+}
+.cw-toolbar-btn:hover { background: rgba(79,109,245,.15); }
+.cw-color-pop {
+  display: none;
+  gap: 8px;
+  align-items: center;
+  margin-left: 6px;
+}
+.cw-color-pop label { font-size: .75rem; font-weight: 600; }
+.cw-color-pop input[type="color"] { width: 36px; height: 28px; border: 0; padding: 0; cursor: pointer; }
+
+
+/* Informe de publicación */
+#pubInforme .bg-success {
+  background: #198754 !important;
+}
+#pubInforme ol li {
+  margin-bottom: .75rem;
+}
+#pubInforme .small.fw-semibold {
+  color: var(--tx) !important;
+  opacity: 1;
+}
+
+/* Botones superiores del editor más definidos */
+.editor-actions {
+  align-items: center;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+.editor-actions .neu-btn {
+  border: 2px solid var(--sh1);
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+.editor-actions .neu-btn.primary {
+  background: var(--ac);
+  color: #fff;
+}
